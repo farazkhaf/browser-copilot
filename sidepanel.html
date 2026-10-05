@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browser Copilot</title>
+  <link rel="stylesheet" href="src/sidepanel.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div>
+          <h1>Browser Copilot</h1>
+          <div class="subtitle">Work across your open tabs</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="newSession" class="icon-button" title="New session" aria-label="New session">＋</button>
+        <button id="openSettings" class="icon-button" title="Settings" aria-label="Settings">⚙</button>
+      </div>
+    </header>
+
+    <section class="chat-card">
+      <div id="messages" class="messages" aria-live="polite">
+        <div id="emptyState" class="empty-state">
+          <div class="empty-orb" aria-hidden="true"><span></span><span></span><span></span></div>
+          <strong>What should I do in the browser?</strong>
+          <span>Ask me to inspect, compare, or act across your open tabs.</span>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div id="progressLine" class="progress-card idle">
+          <div class="progress-indicator" aria-hidden="true"><span></span></div>
+          <div class="progress-copy">
+            <span id="progressState" class="progress-state">Ready</span>
+            <strong id="currentProgress">Waiting for a task</strong>
+            <span id="progressSecondary" class="progress-secondary"></span>
+          </div>
+        </div>
+        <details id="activityDetails" class="activity-details">
+          <summary>
+            <span class="activity-summary"><span id="activityCount" class="count-badge">0</span><span id="activityLabel">steps</span></span>
+            <span class="activity-toggle">Activity</span>
+          </summary>
+          <ol id="activity" class="timeline"></ol>
+        </details>
+      </div>
+
+      <div class="composer">
+        <div class="composer-box">
+          <textarea id="messageInput" rows="2" placeholder="Ask Browser Copilot to do something…" aria-label="Message"></textarea>
+          <div class="composer-footer">
+            <span class="composer-hint">Enter to send · Shift+Enter for a new line</span>
+            <div class="composer-actions">
+              <button id="stopTurn" class="secondary-button stop-button" hidden>Stop</button>
+              <button id="sendMessage" class="send-button" aria-label="Send message" title="Send message">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 19V5M6.5 10.5 12 5l5.5 5.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <details class="dev-card">
+      <summary>Developer trace</summary>
+      <div class="dev-body">
+        <div class="row-title">
+          <div class="muted">Compact model/tool trace for debugging. Raw provider data is available separately.</div>
+        </div>
+        <div class="trace-actions">
+          <button id="exportCompactTrace" class="secondary-button small">Export compact</button>
+          <button id="exportRawTrace" class="secondary-button small">Export raw</button>
+        </div>
+        <pre id="tracePreview">No model activity yet.</pre>
+      </div>
+    </details>
+
+    <details class="dev-card">
+      <summary>Browser tools</summary>
+      <div class="dev-body">
+        <div class="row-title">
+          <span class="section-title">Manual harness</span>
+          <button id="refreshTabs" class="secondary-button small">Refresh tabs</button>
+        </div>
+        <label for="tabSelect">Target tab</label>
+        <select id="tabSelect"></select>
+        <div id="tabMeta" class="muted"></div>
+        <div class="grid two">
+          <button id="focusTab" class="secondary-button">Focus</button>
+          <button id="closeTab" class="secondary-button">Close</button>
+        </div>
+        <label for="openTabInput">Open tab</label>
+        <div class="row">
+          <input id="openTabInput" placeholder="https://example.com" />
+          <button id="openTabButton">Open</button>
+        </div>
+
+        <div class="section-title subsection">Inspect</div>
+        <div class="grid three">
+          <button id="observeButton">Observe</button>
+          <button id="fullStateButton" class="secondary-button">Full state</button>
+          <button data-tool="page_screenshot">Screenshot</button>
+        </div>
+        <label for="searchInput">Search text / regex</label>
+        <div class="row">
+          <input id="searchInput" placeholder="SAML|SSO|SCIM" />
+          <button id="searchButton">Search</button>
+        </div>
+        <label for="selectorInput">Native CSS selector</label>
+        <div class="row">
+          <input id="selectorInput" placeholder="h2, button, a[href]" />
+          <button id="findButton">Find</button>
+        </div>
+        <label for="findTextInput">Optional text filter</label>
+        <input id="findTextInput" placeholder="More tools" />
+        <label for="refInput">Element ref</label>
+        <div class="row">
+          <input id="refInput" placeholder="T1:e12" />
+          <button id="readButton">Read</button>
+        </div>
+
+        <div class="section-title subsection">Act</div>
+        <div class="grid two">
+          <button id="clickButton">Click ref</button>
+          <button id="scrollButton">Scroll</button>
+        </div>
+        <div class="grid two">
+          <select id="scrollDirection">
+            <option value="down">down</option><option value="up">up</option><option value="right">right</option><option value="left">left</option>
+          </select>
+          <input id="scrollAmount" type="number" min="1" placeholder="px (optional)" />
+        </div>
+        <label for="fillInput">Fill value</label>
+        <div class="row"><input id="fillInput" placeholder="text to enter" /><button id="fillButton">Fill</button></div>
+        <label for="selectInput">Select value</label>
+        <div class="row"><input id="selectInput" placeholder="option value" /><button id="selectButton">Select</button></div>
+        <label for="keyInput">Press key</label>
+        <div class="row"><input id="keyInput" value="Enter" /><button id="pressButton">Press</button></div>
+        <label for="waitSeconds">Wait</label>
+        <div class="row"><input id="waitSeconds" type="number" min="0.25" max="15" step="0.25" value="2" /><button id="waitButton">Wait</button></div>
+        <label for="navigateInput">Navigate</label>
+        <div class="row"><input id="navigateInput" placeholder="https://example.com" /><button id="navigateButton">Go</button></div>
+
+        <div class="section-title subsection row-title"><span>Tool result</span><button id="clearOutput" class="secondary-button small">Clear</button></div>
+        <img id="screenshotPreview" hidden alt="Captured tab screenshot" />
+        <pre id="output">Ready.</pre>
+      </div>
+    </details>
+  </main>
+
+  <dialog id="settingsDialog" class="settings-dialog">
+    <form method="dialog" class="settings-card" id="settingsForm">
+      <div class="settings-head">
+        <div>
+          <div class="eyebrow">SETTINGS</div>
+          <h2>Model connection</h2>
+        </div>
+        <button id="closeSettings" class="icon-button" value="cancel" aria-label="Close settings">×</button>
+      </div>
+      <label for="providerSelect">Provider</label>
+      <select id="providerSelect"><option value="openai" selected>OpenAI</option><option value="gemini">Gemini</option></select>
+      <label for="modelInput">Model</label>
+      <input id="modelInput" value="gpt-6-luna" />
+      <label for="apiKeyInput">API key</label>
+      <input id="apiKeyInput" type="password" autocomplete="off" placeholder="sk-…" />
+      <label class="check-row"><input id="rememberKey" type="checkbox" /><span>Remember key on this device</span></label>
+      <div class="muted">Without this option, the key is kept only in extension session storage. This local build calls the model provider directly from the extension.</div>
+      <div class="settings-actions">
+        <button id="saveSettings" value="default">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="src/sidepanel.js"></script>
+</body>
+</html>

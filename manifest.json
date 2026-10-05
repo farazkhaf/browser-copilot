@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Browser Copilot",
+  "version": "0.7.0",
+  "description": "Browser agent prototype that lets an LLM read pages, navigate tabs, interact with web apps, and carry out multi-step tasks.",
+  "permissions": [
+    "sidePanel",
+    "tabs",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Open Browser Copilot"
+  }
+}

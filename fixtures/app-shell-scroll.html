@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browser Copilot App-shell Scroll</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; overflow: hidden; font: 16px/1.5 system-ui, sans-serif; color: #17202a; }
+    body { display: grid; grid-template-rows: 64px 1fr; }
+    header { display: flex; align-items: center; padding: 0 24px; border-bottom: 1px solid #d9dee5; background: white; }
+    main { overflow-y: auto; padding: 28px; background: #f7f9fc; }
+    .stack { max-width: 760px; margin: 0 auto; display: grid; gap: 18px; }
+    section { background: white; border: 1px solid #d9dee5; border-radius: 14px; padding: 22px; min-height: 240px; }
+    button { font: inherit; padding: 9px 12px; }
+  </style>
+</head>
+<body>
+  <header><strong>App-shell fixture</strong></header>
+  <main aria-label="Application content">
+    <div class="stack">
+      <section><h1>Overview</h1><p>The document root cannot scroll. The main application panel can.</p></section>
+      <section><h2>Projects</h2><p>Project Alpha is active.</p></section>
+      <section><h2>Members</h2><p>Ada and Grace are administrators.</p></section>
+      <section><h2>Notifications</h2><p>Weekly summaries are enabled.</p></section>
+      <section>
+        <h2>Bottom action</h2>
+        <button id="bottomAction">Confirm bottom reached</button>
+        <p id="status" role="status">Not confirmed</p>
+      </section>
+    </div>
+  </main>
+  <script>
+    document.querySelector('#bottomAction').addEventListener('click', () => {
+      document.querySelector('#status').textContent = 'Bottom confirmed';
+    });
+  </script>
+</body>
+</html>

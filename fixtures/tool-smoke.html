@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browser Copilot Tool Smoke</title>
+  <style>
+    body { font: 16px/1.5 system-ui, sans-serif; max-width: 760px; margin: 48px auto; padding: 0 20px; color: #17202a; }
+    main { display: grid; gap: 22px; }
+    section { border: 1px solid #dce1e7; border-radius: 14px; padding: 20px; }
+    label { display: grid; gap: 6px; margin: 10px 0; }
+    input, select, button { font: inherit; padding: 9px 10px; }
+    #status { font-weight: 700; }
+    .scrollbox { height: 180px; overflow-y: auto; border: 1px solid #c7ced8; border-radius: 10px; padding: 10px; background: #f8fafc; }
+    .scrollbox p { margin: 0 0 18px; }
+    #suggestions { margin: 8px 0 0; padding-left: 20px; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Browser Tool Smoke Page</h1>
+      <p>Local fixture for testing extension inspection and actions.</p>
+    </header>
+
+    <section>
+      <h2>Profile settings</h2>
+      <label>
+        Display name
+        <input id="displayName" value="Ada" aria-label="Display name" />
+      </label>
+      <ul id="suggestions" aria-label="Name suggestions"></ul>
+      <label>
+        Digest frequency
+        <select id="frequency" aria-label="Digest frequency">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="never">Never</option>
+        </select>
+      </label>
+      <button id="saveButton">Save settings</button>
+      <p id="status" role="status">Not saved</p>
+    </section>
+
+    <section>
+      <h2>Reference material</h2>
+      <p>The Enterprise plan supports SAML SSO and SCIM provisioning.</p>
+      <p>The Team plan supports SSO through Google Workspace but not SAML.</p>
+      <a href="#details" id="detailsLink">Read deployment details</a>
+    </section>
+
+    <section id="details">
+      <h2>Deployment details</h2>
+      <p>Audit logs are retained for 90 days on Enterprise.</p>
+    </section>
+    <section>
+      <h2>Nested scroll test</h2>
+      <p>The document itself is short, but this region has its own scroll surface.</p>
+      <div class="scrollbox" aria-label="Scrollable activity log">
+        <p>Activity 1 — project created</p>
+        <p>Activity 2 — member invited</p>
+        <p>Activity 3 — billing updated</p>
+        <p>Activity 4 — export generated</p>
+        <p>Activity 5 — deployment started</p>
+        <p>Activity 6 — deployment completed</p>
+        <button id="bottomAction">Acknowledge final activity</button>
+      </div>
+      <p id="scrollStatus" role="status">Final activity not acknowledged</p>
+    </section>
+
+  </main>
+  <script>
+    const displayName = document.querySelector('#displayName');
+    displayName.addEventListener('input', () => {
+      const suggestions = document.querySelector('#suggestions');
+      suggestions.replaceChildren();
+      if (!displayName.value.trim()) return;
+      for (const suffix of [' Labs', ' Studio']) {
+        const li = document.createElement('li');
+        li.textContent = `${displayName.value}${suffix}`;
+        suggestions.append(li);
+      }
+    });
+
+    document.querySelector('#saveButton').addEventListener('click', () => {
+      const name = displayName.value;
+      const frequency = document.querySelector('#frequency').value;
+      document.querySelector('#status').textContent = `Saved ${name} with ${frequency} digest`;
+      document.title = 'Browser Copilot Tool Smoke — Saved';
+    });
+
+    document.querySelector('#bottomAction').addEventListener('click', () => {
+      document.querySelector('#scrollStatus').textContent = 'Final activity acknowledged';
+    });
+  </script>
+</body>
+</html>

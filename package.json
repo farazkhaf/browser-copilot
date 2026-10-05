@@ -1,0 +1,11 @@
+{
+  "name": "browser-copilot",
+  "private": true,
+  "version": "0.7.0",
+  "description": "Browser agent prototype for reading pages, navigating tabs, interacting with web apps, and carrying out multi-step tasks in an existing browser session",
+  "scripts": {
+    "check": "node --check src/background.js && node --check src/content/runtime.js && node --check src/sidepanel.js && node --check src/agent/openai.js && node --check src/agent/gemini.js && node --check src/agent/provider.js && node --check src/agent/tool-contract.js && node --check src/agent/browser-session.js && node --check src/agent/browser-agent.js",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "type": "module"
+}
