@@ -6,7 +6,8 @@ It combines compact page observations, browser actions, multi-tab state, and a p
 
 ## Demo
 
-[Watch the 50-second demo](assets/demo.mp4)
+[Watch the 50-second demo](https://drive.google.com/file/d/1T3XntJYTjCke10VpAbpLDme_AXg9t_C7/view?usp=sharing)
+
 
 Browser Copilot reads a manager's email and an existing Gemini conversation, uses that context to fill a linked project-update form across multiple tabs, leaves the form unsubmitted for review, and drafts an acknowledgement email without sending it.
 
